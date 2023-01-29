@@ -66,29 +66,19 @@ public class MyFrame extends JFrame{
 		
 	}
 
-	private Object generateNew() {
-		// TODO Auto-generated method stub
-		return null;
+	private void generateNew() {
 	}
 
-	private Object decSpeed() {
-		// TODO Auto-generated method stub
-		return null;
+	private void decSpeed() {
 	}
 
-	private Object incSpeed() {
-		// TODO Auto-generated method stub
-		return null;
+	private void incSpeed() {
 	}
 
-	private Object stop() {
-		// TODO Auto-generated method stub
-		return null;
+	private void stop() {
 	}
 
-	private Object start() {
-		// TODO Auto-generated method stub
-		return null;
+	private void start() {
 	}
 
 	private void reset() {

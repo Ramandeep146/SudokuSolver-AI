@@ -1,6 +1,8 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -21,18 +23,34 @@ public class MyPanel extends JPanel {
 	
 	private static int unitS = screenW/rowN;
 	
+	private int[][] values = new int[9][9];
+	
 	
 	MyPanel(){
 		this.setPreferredSize(new Dimension(screenW,screenH));
 		this.setFocusable(true);
 		this.setBackground(new Color(118, 184, 222));
+		
+		initialize();
 	}
 	
+	private void initialize() {
+		
+		for(int i=0; i<rowN; i++) {
+			for(int j=0; j<colN; j++) {
+				values[i][j] = 0;
+			}
+		}
+		
+		values[5][5] = 1;
+		
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		drawGrid(g);
-		draw(g);
+		drawValues(g);
 	}
 
 	private void drawGrid(Graphics g) {
@@ -63,8 +81,23 @@ public class MyPanel extends JPanel {
 		
 	}
 
-	private void draw(Graphics g) {
-		
+	private void drawValues(Graphics g) {
+		int fontSize = 20;
+		g.setFont(new Font("Times Roman", Font.BOLD, fontSize));
+		FontMetrics metrics = getFontMetrics(g.getFont()); 
+
+		// Show only revealed cells
+		for(int i=0; i<rowN; i++) {
+			for(int j=0; j<colN; j++) {
+				if(values[i][j] == 0) {
+					continue;
+				}
+				g.setColor(new Color(10,10,10));
+				g.drawString("" + values[i][j], 
+							 i*unitS + unitS/2 - metrics.stringWidth("" + values[i][j])/2, 
+							 j*unitS + unitS/2 + fontSize/2);
+			}
+		}
 	}
 
 	
