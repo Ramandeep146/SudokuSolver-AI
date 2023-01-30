@@ -82,7 +82,8 @@ public class MyFrame extends JFrame{
 	}
 
 	private void reset() {
-		System.out.println("reset");
+		int num1 = 10__00;
+		System.out.println(num1);
 	}
 	
 }

@@ -23,7 +23,18 @@ public class MyPanel extends JPanel {
 	
 	private static int unitS = screenW/rowN;
 	
-	private int[][] values = new int[9][9];
+	//private int[][] values = new int[9][9];
+	private int[][] values = 
+		{	{8, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 1, 3, 8, 6, 7, 5, 4, 9},
+			{4, 7, 0, 5, 0, 3, 2, 6, 0},
+			{0, 0, 0, 0, 5, 0, 9, 8, 1},
+			{0, 6, 8, 9, 0, 0, 0, 0, 0},
+			{7, 0, 1, 3, 4, 0, 0, 2, 0},
+			{6, 0, 0, 0, 7, 0, 0, 0, 4},
+			{0, 0, 7, 0, 0, 9, 0, 0, 0},
+			{0, 3, 0, 0, 8, 0, 0, 1, 2}};
+	private boolean[][] fixedValues = new boolean[9][9];
 	
 	
 	MyPanel(){
@@ -38,11 +49,13 @@ public class MyPanel extends JPanel {
 		
 		for(int i=0; i<rowN; i++) {
 			for(int j=0; j<colN; j++) {
-				values[i][j] = 0;
+				if(values[i][j] == 0) {
+					fixedValues[i][j] = false;
+				}else {
+					fixedValues[i][j] = true;
+				}
 			}
 		}
-		
-		values[5][5] = 1;
 		
 	}
 
@@ -92,14 +105,16 @@ public class MyPanel extends JPanel {
 				if(values[i][j] == 0) {
 					continue;
 				}
-				g.setColor(new Color(10,10,10));
+				if(fixedValues[i][j] == true) {
+					g.setColor(new Color(59, 91, 204));
+				}else {
+					g.setColor(new Color(250, 250, 252));
+				}
 				g.drawString("" + values[i][j], 
-							 i*unitS + unitS/2 - metrics.stringWidth("" + values[i][j])/2, 
-							 j*unitS + unitS/2 + fontSize/2);
+							 j*unitS + unitS/2 - metrics.stringWidth("" + values[i][j])/2, 
+							 i*unitS + unitS/2 + fontSize/2);
 			}
 		}
 	}
-
-	
 	
 }
