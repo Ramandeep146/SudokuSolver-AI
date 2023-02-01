@@ -23,7 +23,7 @@ public class MyPanel extends JPanel implements Runnable{
 	
 	private static int unitS = screenW/rowN;
 	
-	private Thread myThread = new Thread();
+	private Thread myThread;
 	
 	//private int[][] values = new int[9][9];
 	private int[][] values = 
@@ -59,12 +59,11 @@ public class MyPanel extends JPanel implements Runnable{
 				}
 			}
 		}
-		
-		solveSudoku(0,0);
-		
-		repaint();
+		myThread = new Thread(this);
+		myThread.start();
 	}
 	
+	@SuppressWarnings("static-access")
 	private boolean solveSudoku(int i, int j) {
 		
 		if(j==9) {
@@ -90,6 +89,13 @@ public class MyPanel extends JPanel implements Runnable{
 		for(int v=1; v<=9; v++) {
 			if(checkValue(i, j, v)) {
 				values[i][j] = v;
+				try {
+					myThread.sleep(50);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				repaint();
 				int temp = j;
 				if(solveSudoku(i, ++temp)) {
 					return true;
@@ -192,10 +198,12 @@ public class MyPanel extends JPanel implements Runnable{
 
 	@Override
 	public void run() {
-		
-		
-		
-		repaint();
+
+		if(solveSudoku(0,0)) {
+			System.out.println("Solved");
+		}else {
+			System.out.println("No Solution Found");
+		}
 		
 	}
 	
