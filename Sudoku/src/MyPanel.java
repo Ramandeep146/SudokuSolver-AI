@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-public class MyPanel extends JPanel {
+public class MyPanel extends JPanel implements Runnable{
 
 	/**
 	 * 
@@ -23,6 +23,8 @@ public class MyPanel extends JPanel {
 	
 	private static int unitS = screenW/rowN;
 	
+	private Thread myThread = new Thread();
+	
 	//private int[][] values = new int[9][9];
 	private int[][] values = 
 		{	{8, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -34,6 +36,7 @@ public class MyPanel extends JPanel {
 			{6, 0, 0, 0, 7, 0, 0, 0, 4},
 			{0, 0, 7, 0, 0, 9, 0, 0, 0},
 			{0, 3, 0, 0, 8, 0, 0, 1, 2}};
+	
 	private boolean[][] fixedValues = new boolean[9][9];
 	
 	
@@ -56,6 +59,76 @@ public class MyPanel extends JPanel {
 				}
 			}
 		}
+		
+		solveSudoku(0,0);
+		
+		repaint();
+	}
+	
+	private boolean solveSudoku(int i, int j) {
+		
+		if(j==9) {
+			i++;
+			j=0;
+		}
+		
+		if(i==9) {
+			return true;
+		}
+		
+		while(fixedValues[i][j] == true) {
+			j++;
+			if(j==9) {
+				i++;
+				j=0;
+			}
+			if(i==9) {
+				return true;
+			}
+		}
+		
+		for(int v=1; v<=9; v++) {
+			if(checkValue(i, j, v)) {
+				values[i][j] = v;
+				int temp = j;
+				if(solveSudoku(i, ++temp)) {
+					return true;
+				}else {
+					values[i][j] = 0;
+				}
+			}
+			
+		}
+		
+		return false;
+
+	}
+
+
+	private boolean checkValue(int i, int j, int val) {
+		
+		for(int k=0; k<9; k++) {
+			if(values[i][k] == val) {
+				return false;
+			}
+			if(values[k][j] == val) {
+				return false;
+			}
+		}
+		
+		
+		int i1 = i/3;
+		int j1 = j/3;
+		
+		for(int k=0; k<3; k++) {
+			for(int k2=0; k2<3; k2++){
+				if(values[3*i1 + k][3*j1+k2]==val) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
 		
 	}
 
@@ -115,6 +188,15 @@ public class MyPanel extends JPanel {
 							 i*unitS + unitS/2 + fontSize/2);
 			}
 		}
+	}
+
+	@Override
+	public void run() {
+		
+		
+		
+		repaint();
+		
 	}
 	
 }
