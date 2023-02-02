@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -43,7 +44,7 @@ public class MyPanel extends JPanel implements Runnable{
 	
 	private boolean[][] fixedValues = new boolean[9][9];
 	
-	private static final int speedPause = 50;
+	private static int speedPause = 50;
 	
 	
 	MyPanel(){
@@ -77,9 +78,16 @@ public class MyPanel extends JPanel implements Runnable{
 				}
 			}
 		}
-		
+		speedPause = 50;
 		solving = false;
 		paused = false;
+		
+//		Set<Thread> threads = Thread.getAllStackTraces().keySet();
+//		System.out.printf("%-15s \t %-15s \t %-15s \t %s\n", "Name", "State", "Priority", "isDaemon");
+//		for (Thread t : threads) {
+//		    System.out.printf("%-15s \t %-15s \t %-15d \t %s\n", t.getName(), t.getState(), t.getPriority(), t.isDaemon());
+//		}
+//		System.out.println();
 		
 	}
 
@@ -92,6 +100,7 @@ public class MyPanel extends JPanel implements Runnable{
 		solving = true;
 	}
 	
+	@SuppressWarnings("removal")
 	public void pauseBut() throws InterruptedException {
 		myThread.suspend();
 		paused = true;
@@ -104,12 +113,6 @@ public class MyPanel extends JPanel implements Runnable{
 	}
 
 	public void resetBut() {
-		solving = false;
-		paused = false;
-		//myThread.interrupt();
-		
-		System.out.println(myThread.getState());
-		myThread.stop();
 		initialize();
 		repaint();
 	}
@@ -125,6 +128,10 @@ public class MyPanel extends JPanel implements Runnable{
 	// Backtracking Algorithm ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	@SuppressWarnings("static-access")
 	private boolean solveSudoku(int i, int j) {
+		
+		if(solving == false) {
+			return false;
+		}
 		
 		if(j==9) {
 			i++;
@@ -149,12 +156,15 @@ public class MyPanel extends JPanel implements Runnable{
 		for(int v=1; v<=9; v++) {
 			if(checkValue(i, j, v)) {
 				values[i][j] = v;
-				try {
-					myThread.sleep(speedPause);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				if(solving == true) {
+					try {
+						myThread.sleep(speedPause);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					repaint();
 				}
-				repaint();
+				
 				int temp = j;
 				if(solveSudoku(i, ++temp)) {
 					return true;
@@ -271,7 +281,6 @@ public class MyPanel extends JPanel implements Runnable{
 		}
 		
 		solving = false;
-		myThread.stop();
 		
 	}
 	

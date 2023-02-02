@@ -109,10 +109,8 @@ public class MyFrame extends JFrame{
 	}
 
 	private void reset() {
-		if(myPanel.getSolvingStatus()) {
 			myPanel.resetBut();
 			pause.setText("Pause");
-		}
 	}
 	
 }
