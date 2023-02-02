@@ -7,13 +7,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Set;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class MyPanel extends JPanel implements Runnable{
@@ -23,32 +20,31 @@ public class MyPanel extends JPanel implements Runnable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static int screenW = 450;
-	private static int screenH = 450;
+	private final static int WIDTH = 450;
+	private final static int HEIGHT = 450;
 	
-	private static int colN = 9;
-	private static int rowN = 9;
+	private final static int COLS = 9;
+	private final static int ROWS = 9;
 	
-	private static int unitS = screenW/rowN;
+	private final static int UNITS = WIDTH/ROWS;
 	
 	private Thread myThread;
 	private boolean solving = false;
 	private boolean paused = false;
-	private int speedPause = 50;
+	private int delay = 50;
 	
 	private Point selectedPoint;
 	
-	//private int[][] values = new int[9][9];
 	private int[][] values;
 	
-	private boolean[][] fixedValues = new boolean[9][9];
-	private boolean[][] wrongValues = new boolean[9][9];
+	private boolean[][] fixedValues = new boolean[COLS][ROWS];
+	private boolean[][] wrongValues = new boolean[ROWS][COLS];
 	
 	MyPanel(){
-		this.setPreferredSize(new Dimension(screenW,screenH));
+		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		this.setFocusable(true);
 		this.setBackground(new Color(48, 48, 48));
-
+		this.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
 		
 		this.addMouseListener(new MouseAdapter() {
 			@Override
@@ -56,12 +52,12 @@ public class MyPanel extends JPanel implements Runnable{
 				if(solving) {
 					return;
 				}
-				int i = e.getX()/unitS;
-				int j = e.getY()/unitS;
+				int i = e.getX()/UNITS;
+				int j = e.getY()/UNITS;
 				
 				if(!fixedValues[j][i]) {
-					selectedPoint.setX(i*unitS);
-					selectedPoint.setY(j*unitS);
+					selectedPoint.setX(i*UNITS);
+					selectedPoint.setY(j*UNITS);
 				}
 				repaint();
 				
@@ -71,8 +67,11 @@ public class MyPanel extends JPanel implements Runnable{
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				int i = selectedPoint.getY()/unitS;
-				int j = selectedPoint.getX()/unitS;
+				if(solving) {
+					return;
+				}
+				int i = selectedPoint.getY()/UNITS;
+				int j = selectedPoint.getX()/UNITS;
 				int val = e.getKeyChar()-48;
 				if(val >=0 && val <= 9 && i >=0 && j >=0) {
 					values[i][j] = val;
@@ -104,8 +103,8 @@ public class MyPanel extends JPanel implements Runnable{
 		
 		values = val;
 		
-		for(int i=0; i<rowN; i++) {
-			for(int j=0; j<colN; j++) {
+		for(int i=0; i<ROWS; i++) {
+			for(int j=0; j<COLS; j++) {
 				if(values[i][j] == 0) {
 					fixedValues[i][j] = false;
 				}else {
@@ -115,18 +114,11 @@ public class MyPanel extends JPanel implements Runnable{
 			}
 		}
 		
-		speedPause = 50;
+		delay = 50;
 		solving = false;
 		paused = false;
 		
 		selectedPoint = new Point(-100, -100);
-		
-//		Set<Thread> threads = Thread.getAllStackTraces().keySet();
-//		System.out.printf("%-15s \t %-15s \t %-15s \t %s\n", "Name", "State", "Priority", "isDaemon");
-//		for (Thread t : threads) {
-//		    System.out.printf("%-15s \t %-15s \t %-15d \t %s\n", t.getName(), t.getState(), t.getPriority(), t.isDaemon());
-//		}
-//		System.out.println();
 		
 	}
 
@@ -195,7 +187,7 @@ public class MyPanel extends JPanel implements Runnable{
 				values[i][j] = v;
 				if(solving == true) {
 					try {
-						myThread.sleep(speedPause);
+						myThread.sleep(delay);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -265,27 +257,29 @@ public class MyPanel extends JPanel implements Runnable{
 		BasicStroke strokeThick = new BasicStroke(4);
 		g2.setColor(new Color(77, 136, 219));
 				
-		for(int i=0; i<=rowN; i++) {
+		for(int i=0; i<=ROWS; i++) {
 			if(i%3==0) {
 				g2.setStroke(strokeThick);
 			}else {
 				g2.setStroke(strokeThin);
 			}
-			g2.drawLine(unitS*i, 0, unitS*i, screenH);
+			g2.drawLine(UNITS*i, 0, UNITS*i, HEIGHT);
 		}
 				
-		for(int i=0; i<=colN; i++) {
+		for(int i=0; i<=COLS; i++) {
 			if(i%3==0) {
 				g2.setStroke(strokeThick);
 			}else {
 				g2.setStroke(strokeThin);
 			}
-			g2.drawLine(0, unitS*i, screenW, unitS*i);
+			g2.drawLine(0, UNITS*i, WIDTH, UNITS*i);
 		}
 		
-		g2.setColor(new Color(220, 220, 200));
+		g2.setColor(new Color(20, 23, 64));
 		g2.setStroke(strokeThick);
-		g2.drawRect(selectedPoint.getX(), selectedPoint.getY(), unitS, unitS);
+		g2.fillRect(selectedPoint.getX(), selectedPoint.getY(), UNITS, UNITS);
+		g2.setColor(new Color(77, 136, 219));
+		g2.drawRect(selectedPoint.getX(), selectedPoint.getY(), UNITS, UNITS);
 		
 	}
 
@@ -295,21 +289,21 @@ public class MyPanel extends JPanel implements Runnable{
 		FontMetrics metrics = getFontMetrics(g.getFont()); 
 
 		// Show only revealed cells
-		for(int i=0; i<rowN; i++) {
-			for(int j=0; j<colN; j++) {
+		for(int i=0; i<ROWS; i++) {
+			for(int j=0; j<COLS; j++) {
 				if(values[i][j] == 0) {
 					continue;
 				}
 				if(fixedValues[i][j]) {
-					g.setColor(new Color(59, 91, 204));
+					g.setColor(new Color(77, 136, 219));
 				}else if(wrongValues[i][j]){
 					g.setColor(new Color(204, 18, 28));
 				}else {
 					g.setColor(new Color(250, 250, 252));
 				}
 				g.drawString("" + values[i][j], 
-							 j*unitS + unitS/2 - metrics.stringWidth("" + values[i][j])/2, 
-							 i*unitS + unitS/2 + fontSize/2);
+							 j*UNITS + UNITS/2 - metrics.stringWidth("" + values[i][j])/2, 
+							 i*UNITS + UNITS/2 + fontSize/2);
 			}
 		}
 	}

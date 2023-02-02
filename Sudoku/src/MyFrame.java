@@ -1,5 +1,8 @@
 
 
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -31,7 +34,7 @@ public class MyFrame extends JFrame{
 		// Big pannel which will contain other panels
 		JPanel bigPanel = new JPanel();
 		bigPanel.setLayout(new BoxLayout(bigPanel, BoxLayout.X_AXIS));
-		//bigPanel.setBackground(new Color(127, 163, 250));
+		bigPanel.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
 		
 		
 		// Buttons added in the control panel
@@ -112,8 +115,7 @@ public class MyFrame extends JFrame{
 	
 	private void check() {
 		
-		
-		
+
 	}
 	
 }

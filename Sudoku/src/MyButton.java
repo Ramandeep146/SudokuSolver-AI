@@ -17,7 +17,7 @@ public class MyButton extends JButton {
 		
 		//this.setSize(50,50);
 		this.setFont(new Font("Times Roman", Font.BOLD, 10));
-		this.setBackground(new Color(59, 91, 204));
+		this.setBackground(new Color(77, 136, 219));
 		
 		this.setFocusable(false);
 	}
