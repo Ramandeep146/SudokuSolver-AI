@@ -5,6 +5,13 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Set;
 
 import javax.swing.JPanel;
@@ -22,35 +29,62 @@ public class MyPanel extends JPanel implements Runnable{
 	private static int colN = 9;
 	private static int rowN = 9;
 	
-	
-	
 	private static int unitS = screenW/rowN;
 	
 	private Thread myThread;
 	private boolean solving = false;
 	private boolean paused = false;
+	private int speedPause = 50;
+	
+	private Point selectedPoint;
 	
 	//private int[][] values = new int[9][9];
-	private int[][] values = 
-		{	{8, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 1, 3, 8, 6, 7, 5, 4, 9},
-			{4, 7, 0, 5, 0, 3, 2, 6, 0},
-			{0, 0, 0, 0, 5, 0, 9, 8, 1},
-			{0, 6, 8, 9, 0, 0, 0, 0, 0},
-			{7, 0, 1, 3, 4, 0, 0, 2, 0},
-			{6, 0, 0, 0, 7, 0, 0, 0, 4},
-			{0, 0, 7, 0, 0, 9, 0, 0, 0},
-			{0, 3, 0, 0, 8, 0, 0, 1, 2}};
+	private int[][] values;
 	
 	private boolean[][] fixedValues = new boolean[9][9];
-	
-	private static int speedPause = 50;
-	
+	private boolean[][] wrongValues = new boolean[9][9];
 	
 	MyPanel(){
 		this.setPreferredSize(new Dimension(screenW,screenH));
 		this.setFocusable(true);
 		this.setBackground(new Color(118, 184, 222));
+
+		
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(solving) {
+					return;
+				}
+				int i = e.getX()/unitS;
+				int j = e.getY()/unitS;
+				
+				if(!fixedValues[j][i]) {
+					selectedPoint.setX(i*unitS);
+					selectedPoint.setY(j*unitS);
+				}
+				repaint();
+				
+			}
+		});
+		
+		this.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				int i = selectedPoint.getY()/unitS;
+				int j = selectedPoint.getX()/unitS;
+				int val = e.getKeyChar()-48;
+				if(val >=0 && val <= 9 && i>=0 && j>=0) {
+					values[i][j] = val;
+					if(val!=0 && !checkValue(i, j, val)) {
+						wrongValues[i][j] = true;
+					}else {
+						wrongValues[i][j] = false;
+					}
+					repaint();
+				}	
+			}
+		});
 		
 		initialize();
 	}
@@ -67,6 +101,7 @@ public class MyPanel extends JPanel implements Runnable{
 				{6, 0, 0, 0, 7, 0, 0, 0, 4},
 				{0, 0, 7, 0, 0, 9, 0, 0, 0},
 				{0, 3, 0, 0, 8, 0, 0, 1, 2}};
+		
 		values = val;
 		
 		for(int i=0; i<rowN; i++) {
@@ -76,11 +111,15 @@ public class MyPanel extends JPanel implements Runnable{
 				}else {
 					fixedValues[i][j] = true;
 				}
+				wrongValues[i][j] = false;
 			}
 		}
+		
 		speedPause = 50;
 		solving = false;
 		paused = false;
+		
+		selectedPoint = new Point(-100, -100);
 		
 //		Set<Thread> threads = Thread.getAllStackTraces().keySet();
 //		System.out.printf("%-15s \t %-15s \t %-15s \t %s\n", "Name", "State", "Priority", "isDaemon");
@@ -92,11 +131,9 @@ public class MyPanel extends JPanel implements Runnable{
 	}
 
 	public void autoSolveBut() {
-
 		initialize();
 		myThread = new Thread(this);
 		myThread.start();
-		
 		solving = true;
 	}
 	
@@ -179,14 +216,14 @@ public class MyPanel extends JPanel implements Runnable{
 
 	}
 
-
 	private boolean checkValue(int i, int j, int val) {
 		
 		for(int k=0; k<9; k++) {
-			if(values[i][k] == val) {
+			
+			if(j!=k && values[i][k] == val) {
 				return false;
 			}
-			if(values[k][j] == val) {
+			if(i!=k && values[k][j] == val) {
 				return false;
 			}
 		}
@@ -197,6 +234,9 @@ public class MyPanel extends JPanel implements Runnable{
 		
 		for(int k=0; k<3; k++) {
 			for(int k2=0; k2<3; k2++){
+				if((3*i1 + k) == i && (3*j1 + k2) == j) {
+					continue;
+				}
 				if(values[3*i1 + k][3*j1+k2]==val) {
 					return false;
 				}
@@ -243,6 +283,10 @@ public class MyPanel extends JPanel implements Runnable{
 			g2.drawLine(0, unitS*i, screenW, unitS*i);
 		}
 		
+		g2.setColor(new Color(220, 220, 200));
+		g2.setStroke(strokeThick);
+		g2.drawRect(selectedPoint.getX(), selectedPoint.getY(), unitS, unitS);
+		
 	}
 
 	private void drawValues(Graphics g) {
@@ -256,8 +300,10 @@ public class MyPanel extends JPanel implements Runnable{
 				if(values[i][j] == 0) {
 					continue;
 				}
-				if(fixedValues[i][j] == true) {
+				if(fixedValues[i][j]) {
 					g.setColor(new Color(59, 91, 204));
+				}else if(wrongValues[i][j]){
+					g.setColor(new Color(204, 18, 28));
 				}else {
 					g.setColor(new Color(250, 250, 252));
 				}

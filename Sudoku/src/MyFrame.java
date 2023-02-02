@@ -21,7 +21,7 @@ public class MyFrame extends JFrame{
 	MyButton start;
 	MyButton pause;
 	MyButton incSpeed;
-	MyButton decSpeed;
+	MyButton check;
 	MyButton reset;
 	MyButton generateNew;
 	
@@ -58,9 +58,9 @@ public class MyFrame extends JFrame{
 		incSpeed.addActionListener(e -> incSpeed());
 		controlPanel.add(incSpeed);
 		
-		decSpeed = new MyButton("Speed Down", 10, (buttonH + gap) * 4 + gap, buttonW, buttonH);
-		decSpeed.addActionListener(e -> decSpeed());
-		controlPanel.add(decSpeed);
+		check = new MyButton("Check", 10, (buttonH + gap) * 4 + gap, buttonW, buttonH);
+		check.addActionListener(e -> check());
+		controlPanel.add(check);
 		
 		generateNew = new MyButton("New Level", 10, (buttonH + gap) * 5 + gap, buttonW, buttonH);
 		generateNew.addActionListener(e -> generateNew());
@@ -82,9 +82,6 @@ public class MyFrame extends JFrame{
 	}
 
 	private void generateNew() {
-	}
-
-	private void decSpeed() {
 	}
 
 	private void incSpeed() {
@@ -109,8 +106,14 @@ public class MyFrame extends JFrame{
 	}
 
 	private void reset() {
-			myPanel.resetBut();
-			pause.setText("Pause");
+		myPanel.resetBut();
+		pause.setText("Pause");
+	}
+	
+	private void check() {
+		
+		
+		
 	}
 	
 }
