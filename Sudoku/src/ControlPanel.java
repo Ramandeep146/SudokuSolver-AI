@@ -14,7 +14,7 @@ public class ControlPanel extends JPanel{
 	
 	ControlPanel(){
 		
-		this.setBackground(new Color(59, 91, 204));
+		this.setBackground(new Color(48, 48, 48));
 		this.setPreferredSize(new Dimension(screenW,screenH));
 		this.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
 		this.setLayout(null);

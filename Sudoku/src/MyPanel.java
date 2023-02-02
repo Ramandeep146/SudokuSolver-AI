@@ -47,7 +47,7 @@ public class MyPanel extends JPanel implements Runnable{
 	MyPanel(){
 		this.setPreferredSize(new Dimension(screenW,screenH));
 		this.setFocusable(true);
-		this.setBackground(new Color(118, 184, 222));
+		this.setBackground(new Color(48, 48, 48));
 
 		
 		this.addMouseListener(new MouseAdapter() {
@@ -74,7 +74,7 @@ public class MyPanel extends JPanel implements Runnable{
 				int i = selectedPoint.getY()/unitS;
 				int j = selectedPoint.getX()/unitS;
 				int val = e.getKeyChar()-48;
-				if(val >=0 && val <= 9 && i>=0 && j>=0) {
+				if(val >=0 && val <= 9 && i >=0 && j >=0) {
 					values[i][j] = val;
 					if(val!=0 && !checkValue(i, j, val)) {
 						wrongValues[i][j] = true;
