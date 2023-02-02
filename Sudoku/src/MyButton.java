@@ -10,7 +10,7 @@ public class MyButton extends JButton {
 	 */
 	private static final long serialVersionUID = 4093122890422314038L;
 
-	MyButton(String text, int x1, int y1, int w, int h){
+	MyButton(String text, int x1, int y1, int w, int h){;
 		this.setText(text);
 		//this.setPreferredSize(new Dimension(80, 25));
 		this.setBounds(x1, y1, w, h);
@@ -20,6 +20,10 @@ public class MyButton extends JButton {
 		this.setBackground(new Color(118, 184, 222));
 		
 		this.setFocusable(false);
+	}
+	
+	public void setName(String text) {
+		this.setText(text);
 	}
 	
 }

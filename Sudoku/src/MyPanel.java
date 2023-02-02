@@ -21,9 +21,13 @@ public class MyPanel extends JPanel implements Runnable{
 	private static int colN = 9;
 	private static int rowN = 9;
 	
+	
+	
 	private static int unitS = screenW/rowN;
 	
 	private Thread myThread;
+	private boolean solving = false;
+	private boolean paused = false;
 	
 	//private int[][] values = new int[9][9];
 	private int[][] values = 
@@ -39,6 +43,8 @@ public class MyPanel extends JPanel implements Runnable{
 	
 	private boolean[][] fixedValues = new boolean[9][9];
 	
+	private static final int speedPause = 50;
+	
 	
 	MyPanel(){
 		this.setPreferredSize(new Dimension(screenW,screenH));
@@ -50,6 +56,18 @@ public class MyPanel extends JPanel implements Runnable{
 	
 	private void initialize() {
 		
+		int[][] val = 
+			{	{8, 0, 0, 0, 0, 0, 0, 0, 0},
+				{0, 1, 3, 8, 6, 7, 5, 4, 9},
+				{4, 7, 0, 5, 0, 3, 2, 6, 0},
+				{0, 0, 0, 0, 5, 0, 9, 8, 1},
+				{0, 6, 8, 9, 0, 0, 0, 0, 0},
+				{7, 0, 1, 3, 4, 0, 0, 2, 0},
+				{6, 0, 0, 0, 7, 0, 0, 0, 4},
+				{0, 0, 7, 0, 0, 9, 0, 0, 0},
+				{0, 3, 0, 0, 8, 0, 0, 1, 2}};
+		values = val;
+		
 		for(int i=0; i<rowN; i++) {
 			for(int j=0; j<colN; j++) {
 				if(values[i][j] == 0) {
@@ -59,10 +77,52 @@ public class MyPanel extends JPanel implements Runnable{
 				}
 			}
 		}
+		
+		solving = false;
+		paused = false;
+		
+	}
+
+	public void autoSolveBut() {
+
+		initialize();
 		myThread = new Thread(this);
 		myThread.start();
+		
+		solving = true;
 	}
 	
+	public void pauseBut() throws InterruptedException {
+		myThread.suspend();
+		paused = true;
+	}
+	
+	@SuppressWarnings("removal")
+	public void restartBut() {
+		myThread.resume();
+		paused = false;
+	}
+
+	public void resetBut() {
+		solving = false;
+		paused = false;
+		//myThread.interrupt();
+		
+		System.out.println(myThread.getState());
+		myThread.stop();
+		initialize();
+		repaint();
+	}
+	
+	public boolean getSolvingStatus() {
+		return solving;
+	}
+	
+	public boolean getPauseStatus() {
+		return paused;
+	}
+	
+	// Backtracking Algorithm ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	@SuppressWarnings("static-access")
 	private boolean solveSudoku(int i, int j) {
 		
@@ -90,9 +150,8 @@ public class MyPanel extends JPanel implements Runnable{
 			if(checkValue(i, j, v)) {
 				values[i][j] = v;
 				try {
-					myThread.sleep(50);
+					myThread.sleep(speedPause);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				repaint();
@@ -137,7 +196,10 @@ public class MyPanel extends JPanel implements Runnable{
 		return true;
 		
 	}
-
+	
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	
+	// Draw Board+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -195,7 +257,10 @@ public class MyPanel extends JPanel implements Runnable{
 			}
 		}
 	}
-
+	
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	
+	//Running the Thread
 	@Override
 	public void run() {
 
@@ -204,6 +269,9 @@ public class MyPanel extends JPanel implements Runnable{
 		}else {
 			System.out.println("No Solution Found");
 		}
+		
+		solving = false;
+		myThread.stop();
 		
 	}
 	

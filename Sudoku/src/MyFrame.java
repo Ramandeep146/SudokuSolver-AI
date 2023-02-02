@@ -17,6 +17,14 @@ public class MyFrame extends JFrame{
 	private int buttonH = 40;
 	private int buttonW = 100;
 	private int gap = 30;
+	
+	MyButton start;
+	MyButton pause;
+	MyButton incSpeed;
+	MyButton decSpeed;
+	MyButton reset;
+	MyButton generateNew;
+	
 
 	MyFrame(){
 		
@@ -27,27 +35,34 @@ public class MyFrame extends JFrame{
 		
 		
 		// Buttons added in the control panel
-		MyButton start = new MyButton("Start", 10, (buttonH + gap) * 0 + gap, buttonW, buttonH);
-		start.addActionListener(e -> start());
+		start = new MyButton("Auto Solve", 10, (buttonH + gap) * 0 + gap, buttonW, buttonH);
+		start.addActionListener(e -> autoSolve());
 		controlPanel.add(start);
 		
-		MyButton stop = new MyButton("Stop", 10, (buttonH + gap) * 1 + gap, buttonW, buttonH);
-		stop.addActionListener(e -> stop());
-		controlPanel.add(stop);
+		pause = new MyButton("Pause", 10, (buttonH + gap) * 1 + gap, buttonW, buttonH);
+		pause.addActionListener(e -> {
+			try {
+				pause();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		controlPanel.add(pause);
 		
-		MyButton incSpeed = new MyButton("Speed Up", 10, (buttonH + gap) * 2 + gap, buttonW, buttonH);
-		incSpeed.addActionListener(e -> incSpeed());
-		controlPanel.add(incSpeed);
-		
-		MyButton decSpeed = new MyButton("Speed Down", 10, (buttonH + gap) * 3 + gap, buttonW, buttonH);
-		decSpeed.addActionListener(e -> decSpeed());
-		controlPanel.add(decSpeed);
-		
-		MyButton reset = new MyButton("Reset", 10, (buttonH + gap) * 4 + gap, buttonW, buttonH);
+		reset = new MyButton("Reset", 10, (buttonH + gap) * 2 + gap, buttonW, buttonH);
 		reset.addActionListener(e -> reset());
 		controlPanel.add(reset);
 		
-		MyButton generateNew = new MyButton("New Level", 10, (buttonH + gap) * 5 + gap, buttonW, buttonH);
+		incSpeed = new MyButton("Speed Up", 10, (buttonH + gap) * 3 + gap, buttonW, buttonH);
+		incSpeed.addActionListener(e -> incSpeed());
+		controlPanel.add(incSpeed);
+		
+		decSpeed = new MyButton("Speed Down", 10, (buttonH + gap) * 4 + gap, buttonW, buttonH);
+		decSpeed.addActionListener(e -> decSpeed());
+		controlPanel.add(decSpeed);
+		
+		generateNew = new MyButton("New Level", 10, (buttonH + gap) * 5 + gap, buttonW, buttonH);
 		generateNew.addActionListener(e -> generateNew());
 		controlPanel.add(generateNew);
 		
@@ -75,15 +90,29 @@ public class MyFrame extends JFrame{
 	private void incSpeed() {
 	}
 
-	private void stop() {
+	private void pause() throws InterruptedException {
+		
+		if(!myPanel.getPauseStatus() && myPanel.getSolvingStatus()) {
+			myPanel.pauseBut();
+			pause.setText("Re-Start");
+		}else if(myPanel.getSolvingStatus()) {
+			myPanel.restartBut();
+			pause.setText("Pause");
+		}
+		
 	}
 
-	private void start() {
+	private void autoSolve() {
+		if(!myPanel.getSolvingStatus()) {
+			myPanel.autoSolveBut();
+		}
 	}
 
 	private void reset() {
-		int num1 = 10__00;
-		System.out.println(num1);
+		if(myPanel.getSolvingStatus()) {
+			myPanel.resetBut();
+			pause.setText("Pause");
+		}
 	}
 	
 }
