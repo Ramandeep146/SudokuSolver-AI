@@ -45,7 +45,7 @@ public class MyPanel extends JPanel implements Runnable{
 		this.setFocusable(true);
 		this.setBackground(new Color(48, 48, 48));
 		this.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
-		
+
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -63,16 +63,25 @@ public class MyPanel extends JPanel implements Runnable{
 				
 			}
 		});
-		
+
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				
 				if(solving) {
 					return;
 				}
+				
 				int i = selectedPoint.getY()/UNITS;
 				int j = selectedPoint.getX()/UNITS;
 				int val = e.getKeyChar()-48;
+				
+				if(values[i][j] == val) {
+					values[i][j] = 0;
+					repaint();
+					return;
+				}
+				
 				if(val >=0 && val <= 9 && i >=0 && j >=0) {
 					values[i][j] = val;
 					if(val!=0 && !checkValue(i, j, val)) {
@@ -84,7 +93,6 @@ public class MyPanel extends JPanel implements Runnable{
 				}	
 			}
 		});
-		
 		initialize();
 	}
 	

@@ -104,21 +104,27 @@ public class MyFrame extends JFrame{
 	}
 
 	private void autoSolve() {
-		if(!myPanel.getSolvingStatus()) {
+		controlPanel.reset();
+		if(!myPanel.getSolvingStatus()) {	
 			myPanel.autoSolveBut();
 		}
 	}
 
 	private void reset() {
+		controlPanel.reset();
 		myPanel.resetBut();
 		pause.setText("Pause");
-		
 	}
 	
 	private void check() {
-		if(!myPanel.getSolvingStatus()) {
-			System.out.println(myPanel.check());
-		}
+		//if(!myPanel.getSolvingStatus()) {
+			if(myPanel.check()) {
+				controlPanel.displayAction(true);
+			}else {
+				System.out.println("here");
+				controlPanel.displayAction(false);
+			}
+		//}
 	}
 	
 }
