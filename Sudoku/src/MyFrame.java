@@ -16,6 +16,7 @@ public class MyFrame extends JFrame{
 	
 	private MyPanel myPanel = new MyPanel(); 
 	private ControlPanel controlPanel = new ControlPanel();
+	private TitlePanel titlePanel = new TitlePanel();
 	
 	private int buttonH = 40;
 	private int buttonW = 100;
@@ -23,18 +24,20 @@ public class MyFrame extends JFrame{
 	
 	MyButton start;
 	MyButton pause;
-	MyButton incSpeed;
 	MyButton check;
 	MyButton reset;
 	MyButton generateNew;
 	
-
 	MyFrame(){
+		
+		JPanel godPanel = new JPanel();
+		godPanel.setLayout(new BoxLayout(godPanel, BoxLayout.Y_AXIS));
+		godPanel.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
+		
 		
 		// Big pannel which will contain other panels
 		JPanel bigPanel = new JPanel();
 		bigPanel.setLayout(new BoxLayout(bigPanel, BoxLayout.X_AXIS));
-		bigPanel.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
 		
 		
 		// Buttons added in the control panel
@@ -56,16 +59,13 @@ public class MyFrame extends JFrame{
 		reset = new MyButton("Reset", 10, (buttonH + gap) * 2 + gap, buttonW, buttonH);
 		reset.addActionListener(e -> reset());
 		controlPanel.add(reset);
+
 		
-		incSpeed = new MyButton("Speed Up", 10, (buttonH + gap) * 3 + gap, buttonW, buttonH);
-		incSpeed.addActionListener(e -> incSpeed());
-		controlPanel.add(incSpeed);
-		
-		check = new MyButton("Check", 10, (buttonH + gap) * 4 + gap, buttonW, buttonH);
+		check = new MyButton("Check", 10, (buttonH + gap) * 3 + gap, buttonW, buttonH);
 		check.addActionListener(e -> check());
 		controlPanel.add(check);
 		
-		generateNew = new MyButton("New Level", 10, (buttonH + gap) * 5 + gap, buttonW, buttonH);
+		generateNew = new MyButton("New Level", 10, (buttonH + gap) * 4 + gap, buttonW, buttonH);
 		generateNew.addActionListener(e -> generateNew());
 		controlPanel.add(generateNew);
 		
@@ -73,8 +73,11 @@ public class MyFrame extends JFrame{
 		bigPanel.add(myPanel);
 		bigPanel.add(controlPanel);
 		
+		godPanel.add(titlePanel);
+		godPanel.add(bigPanel);
+		
 		// Adding the big panel in myFrame and setting it up
-		this.add(bigPanel);
+		this.add(godPanel);
 		this.setTitle("Sudoku Solver");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
@@ -87,14 +90,12 @@ public class MyFrame extends JFrame{
 	private void generateNew() {
 	}
 
-	private void incSpeed() {
-	}
 
 	private void pause() throws InterruptedException {
 		
 		if(!myPanel.getPauseStatus() && myPanel.getSolvingStatus()) {
 			myPanel.pauseBut();
-			pause.setText("Re-Start");
+			pause.setText("Resume");
 		}else if(myPanel.getSolvingStatus()) {
 			myPanel.restartBut();
 			pause.setText("Pause");
@@ -114,8 +115,9 @@ public class MyFrame extends JFrame{
 	}
 	
 	private void check() {
-		
-
+		if(!myPanel.getSolvingStatus()) {
+			System.out.println(myPanel.check());
+		}
 	}
 	
 }

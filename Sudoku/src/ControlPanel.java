@@ -21,5 +21,7 @@ public class ControlPanel extends JPanel{
 		this.setFocusable(true);
 		
 	}	
+	
+	
 
 }

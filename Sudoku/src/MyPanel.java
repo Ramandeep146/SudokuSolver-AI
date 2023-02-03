@@ -36,9 +36,9 @@ public class MyPanel extends JPanel implements Runnable{
 	private Point selectedPoint;
 	
 	private int[][] values;
-	
 	private boolean[][] fixedValues = new boolean[COLS][ROWS];
 	private boolean[][] wrongValues = new boolean[ROWS][COLS];
+	private boolean solved;
 	
 	MyPanel(){
 		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
@@ -117,6 +117,7 @@ public class MyPanel extends JPanel implements Runnable{
 		delay = 50;
 		solving = false;
 		paused = false;
+		solved = false;
 		
 		selectedPoint = new Point(-100, -100);
 		
@@ -144,6 +145,19 @@ public class MyPanel extends JPanel implements Runnable{
 	public void resetBut() {
 		initialize();
 		repaint();
+	}
+	
+	public boolean check() {
+		for(int i=0; i<9; i++) {
+			for(int j=0; j<9; j++) {
+				if(values[i][j]==0 || wrongValues[i][j]) {
+					solved = false;
+					return false;
+				}
+			}
+		}
+		solved = true;
+		return true;
 	}
 	
 	public boolean getSolvingStatus() {
@@ -313,15 +327,14 @@ public class MyPanel extends JPanel implements Runnable{
 	//Running the Thread
 	@Override
 	public void run() {
-
 		if(solveSudoku(0,0)) {
+			solved = true;
 			System.out.println("Solved");
 		}else {
+			solved = false;
 			System.out.println("No Solution Found");
 		}
-		
 		solving = false;
-		
 	}
 	
 }
