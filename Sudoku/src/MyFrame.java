@@ -112,6 +112,7 @@ public class MyFrame extends JFrame{
 	private void reset() {
 		myPanel.resetBut();
 		pause.setText("Pause");
+		
 	}
 	
 	private void check() {
