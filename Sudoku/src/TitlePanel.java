@@ -41,7 +41,7 @@ public class TitlePanel extends JPanel{
 		g.drawString(message, screenW/2 - metrics.stringWidth(message)/2, screenH/2 + fontSize/2 - 8);
 		
 		try {
-			image = ImageIO.read(new File("title.png"));
+			image = ImageIO.read(new File("src/resources/title.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

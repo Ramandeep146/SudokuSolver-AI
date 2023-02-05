@@ -45,7 +45,7 @@ public class ControlPanel extends JPanel implements Runnable{
 			g.drawImage(action, 80, 410, 80, 80, null);
 		}else {
 			try {
-				action = ImageIO.read(new File("s.png"));
+				action = ImageIO.read(new File("src/resources/s.png"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -83,7 +83,7 @@ public class ControlPanel extends JPanel implements Runnable{
 	public void displayTick() {
 		try {
 			action = null;
-			action = ImageIO.read(new File("check.png"));
+			action = ImageIO.read(new File("src/resources/check.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class ControlPanel extends JPanel implements Runnable{
 	public void displayCross() {
 		try {
 			action = null;
-			action = ImageIO.read(new File("close.png"));
+			action = ImageIO.read(new File("src/resources/close.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
