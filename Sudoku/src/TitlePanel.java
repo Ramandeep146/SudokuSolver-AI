@@ -3,7 +3,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
@@ -15,7 +19,9 @@ public class TitlePanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private static int screenW = 780;
-	private static int screenH = 80;
+	private static int screenH = 100;
+	
+	private BufferedImage image;
 	
 	TitlePanel(){
 		this.setBackground(new Color(48, 48, 48));
@@ -33,8 +39,14 @@ public class TitlePanel extends JPanel{
 		FontMetrics metrics = getFontMetrics(g.getFont());
 		g.setColor(new Color(77, 136, 219));
 		g.drawString(message, screenW/2 - metrics.stringWidth(message)/2, screenH/2 + fontSize/2 - 8);
+		
+		try {
+			image = ImageIO.read(new File("title.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		g.drawImage(image, 0, 0, screenW, screenH, null);
 	}
-	
-	
-
 }
