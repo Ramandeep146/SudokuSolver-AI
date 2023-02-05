@@ -36,9 +36,18 @@ public class MyPanel extends JPanel implements Runnable{
 	private Point selectedPoint;
 	
 	private int[][] values;
-	private boolean[][] fixedValues = new boolean[COLS][ROWS];
-	private boolean[][] wrongValues = new boolean[ROWS][COLS];
-	private boolean solved;
+	int[][] val = 
+		{	{8, 0, 0, 0, 0, 0, 0, 0, 0},
+			{0, 1, 3, 8, 6, 7, 5, 4, 9},
+			{4, 7, 0, 5, 0, 3, 2, 6, 0},
+			{0, 0, 0, 0, 5, 0, 9, 8, 1},
+			{0, 6, 8, 9, 0, 0, 0, 0, 0},
+			{7, 0, 1, 3, 4, 0, 0, 2, 0},
+			{6, 0, 0, 0, 7, 0, 0, 0, 4},
+			{0, 0, 7, 0, 0, 9, 0, 0, 0},
+			{0, 3, 0, 0, 8, 0, 0, 1, 2}};
+	private boolean[][] fixedValues;
+	private boolean[][] wrongValues;
 	
 	MyPanel(){
 		this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
@@ -98,21 +107,17 @@ public class MyPanel extends JPanel implements Runnable{
 	
 	private void initialize() {
 		
-		int[][] val = 
-			{	{8, 0, 0, 0, 0, 0, 0, 0, 0},
-				{0, 1, 3, 8, 6, 7, 5, 4, 9},
-				{4, 7, 0, 5, 0, 3, 2, 6, 0},
-				{0, 0, 0, 0, 5, 0, 9, 8, 1},
-				{0, 6, 8, 9, 0, 0, 0, 0, 0},
-				{7, 0, 1, 3, 4, 0, 0, 2, 0},
-				{6, 0, 0, 0, 7, 0, 0, 0, 4},
-				{0, 0, 7, 0, 0, 9, 0, 0, 0},
-				{0, 3, 0, 0, 8, 0, 0, 1, 2}};
+		delay = 0;
+		solving = false;
+		paused = false;
 		
-		values = val;
+		fixedValues = new boolean[COLS][ROWS];
+		wrongValues = new boolean[ROWS][COLS];
+		values = new int[9][9];
 		
 		for(int i=0; i<ROWS; i++) {
 			for(int j=0; j<COLS; j++) {
+				values[i][j] = val[i][j];
 				if(values[i][j] == 0) {
 					fixedValues[i][j] = false;
 				}else {
@@ -121,12 +126,7 @@ public class MyPanel extends JPanel implements Runnable{
 				wrongValues[i][j] = false;
 			}
 		}
-		
-		delay = 50;
-		solving = false;
-		paused = false;
-		solved = false;
-		
+
 		selectedPoint = new Point(-100, -100);
 		
 	}
@@ -159,13 +159,25 @@ public class MyPanel extends JPanel implements Runnable{
 		for(int i=0; i<9; i++) {
 			for(int j=0; j<9; j++) {
 				if(values[i][j]==0 || wrongValues[i][j]) {
-					solved = false;
 					return false;
 				}
 			}
 		}
-		solved = true;
 		return true;
+	}
+	
+	public void generateNewLevel() {
+		if(solving) {
+			return;
+		}
+		long startTime = System.nanoTime();
+		LevelGenerator newLevel = new LevelGenerator();
+		val = newLevel.getArray();
+		long endTime = System.nanoTime();
+		initialize();
+		long duration = (endTime - startTime);
+		System.out.println(((double)duration)/1000000 + " milliseconds for auto level generation");
+		repaint();
 	}
 	
 	public boolean getSolvingStatus() {
@@ -260,9 +272,9 @@ public class MyPanel extends JPanel implements Runnable{
 		return true;
 		
 	}
-	
+
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	
+
 	// Draw Board+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	@Override
 	public void paintComponent(Graphics g) {
@@ -335,13 +347,16 @@ public class MyPanel extends JPanel implements Runnable{
 	//Running the Thread
 	@Override
 	public void run() {
+		long startTime = System.nanoTime();
 		if(solveSudoku(0,0)) {
-			solved = true;
 			System.out.println("Solved");
 		}else {
-			solved = false;
 			System.out.println("No Solution Found");
 		}
+		long endTime = System.nanoTime();
+
+		long duration = (endTime - startTime);
+		System.out.println(((double)duration)/1000000 + " milliseconds for auto solving");
 		solving = false;
 	}
 	

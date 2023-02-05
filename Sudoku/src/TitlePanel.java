@@ -28,7 +28,7 @@ public class TitlePanel extends JPanel{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		int fontSize = 50;
-		String message = "Super Sudoku";
+		String message = "Super Fun Sudoku";
 		g.setFont(new Font("Serif", Font.BOLD + Font.ITALIC, fontSize));
 		FontMetrics metrics = getFontMetrics(g.getFont());
 		g.setColor(new Color(77, 136, 219));

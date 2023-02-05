@@ -1,5 +1,3 @@
-
-
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
@@ -88,6 +86,9 @@ public class MyFrame extends JFrame{
 	}
 
 	private void generateNew() {
+		
+		myPanel.generateNewLevel();
+		
 	}
 
 

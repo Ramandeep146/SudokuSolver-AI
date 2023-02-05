@@ -54,7 +54,7 @@ public class ControlPanel extends JPanel implements Runnable{
 			displayCross();
 		}
 		try {
-			t.sleep(800);
+			t.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
