@@ -1,6 +1,6 @@
+package superFunSudoku;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -16,9 +16,13 @@ public class ControlPanel extends JPanel implements Runnable{
 	private static int screenW = 240;
 	private static int screenH = 540;
 	
-	private BufferedImage action;
+	private BufferedImage check;
+	private BufferedImage cross;
+	private BufferedImage s;
 	private boolean solved;
 	Thread t;
+	
+	String string = "tick";
 	
 	boolean bool;
 
@@ -29,6 +33,26 @@ public class ControlPanel extends JPanel implements Runnable{
 		this.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
 		this.setLayout(null);
 		this.setFocusable(false);
+		
+		try {
+			check = ImageIO.read(ControlPanel.class.getResource("/imgs/check.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			cross = ImageIO.read(ControlPanel.class.getResource("/imgs/close.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			s = ImageIO.read(ControlPanel.class.getResource("/imgs/s.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		bool = false;
 	}	
 	
@@ -42,15 +66,13 @@ public class ControlPanel extends JPanel implements Runnable{
 		super.paintComponent(g);
 		
 		if(bool) {
-			g.drawImage(action, 80, 410, 80, 80, null);
-		}else {
-			try {
-				action = ImageIO.read(new File("resources/s.png"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(string=="check") {
+				g.drawImage(check, 80, 410, 80, 80, this);
+			}else {
+				g.drawImage(cross, 80, 410, 80, 80, this);
 			}
-			g.drawImage(action, 60, 400, 120, 110, null);
+		}else {
+			g.drawImage(s, 60, 400, 120, 110, this);
 		}
 		
 		Graphics2D g2 = (Graphics2D) g;
@@ -81,25 +103,13 @@ public class ControlPanel extends JPanel implements Runnable{
 	}
 
 	public void displayTick() {
-		try {
-			action = null;
-			action = ImageIO.read(new File("resources/check.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		string = "check";
 		repaint();
 		
 	}
 	
 	public void displayCross() {
-		try {
-			action = null;
-			action = ImageIO.read(new File("resources/close.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		string = "cross";
 		repaint();
 	}
 	

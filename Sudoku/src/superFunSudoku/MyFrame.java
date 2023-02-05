@@ -1,3 +1,4 @@
+package superFunSudoku;
 import java.awt.Color;
 
 import javax.swing.BorderFactory;

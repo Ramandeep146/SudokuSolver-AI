@@ -1,3 +1,4 @@
+package superFunSudoku;
 
 public class Point {
 

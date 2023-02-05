@@ -1,3 +1,4 @@
+package superFunSudoku;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -28,6 +29,14 @@ public class TitlePanel extends JPanel{
 		this.setPreferredSize(new Dimension(screenW,screenH));
 		this.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
 		this.setLayout(null);
+		
+		try {
+			image = ImageIO.read(TitlePanel.class.getResource("/imgs/title.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@Override
@@ -40,12 +49,7 @@ public class TitlePanel extends JPanel{
 		g.setColor(new Color(77, 136, 219));
 		g.drawString(message, screenW/2 - metrics.stringWidth(message)/2, screenH/2 + fontSize/2 - 8);
 		
-		try {
-			image = ImageIO.read(new File("resources/title.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 		g.drawImage(image, 0, 0, screenW, screenH, null);
 	}
