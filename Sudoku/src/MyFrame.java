@@ -2,6 +2,7 @@ import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -20,11 +21,14 @@ public class MyFrame extends JFrame{
 	private int buttonW = 100;
 	private int gap = 30;
 	
+	private String gameLevel;
+	
 	MyButton start;
 	MyButton pause;
 	MyButton check;
 	MyButton reset;
 	MyButton generateNew;
+	MyComboBox myComboBox;
 	
 	MyFrame(){
 		
@@ -63,9 +67,23 @@ public class MyFrame extends JFrame{
 		check.addActionListener(e -> check());
 		controlPanel.add(check);
 		
-		generateNew = new MyButton("New Level", 10, (buttonH + gap) * 4 + gap, buttonW, buttonH);
+		generateNew = new MyButton("New Level", 10, (buttonH + gap) * 4 + gap+gap/2, buttonW, buttonH);
 		generateNew.addActionListener(e -> generateNew());
 		controlPanel.add(generateNew);
+		
+		myComboBox = new MyComboBox(10, (buttonH + gap) * 5 + gap+gap/2, buttonW, buttonH);
+		gameLevel = (String) myComboBox.getSelectedItem();
+		myComboBox.addActionListener(e -> {
+			
+			if(myComboBox.getSelectedItem() == null) {
+				return;
+			}
+			
+			if(e.getSource()==myComboBox) {
+				gameLevel = (String) myComboBox.getSelectedItem();
+			}
+		});
+		controlPanel.add(myComboBox);
 		
 		// Adding other panels in the big panel
 		bigPanel.add(myPanel);
@@ -87,7 +105,7 @@ public class MyFrame extends JFrame{
 
 	private void generateNew() {
 		
-		myPanel.generateNewLevel();
+		myPanel.generateNewLevel(gameLevel);
 		
 	}
 

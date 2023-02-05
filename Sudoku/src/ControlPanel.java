@@ -14,7 +14,7 @@ public class ControlPanel extends JPanel implements Runnable{
 	 */
 	private static final long serialVersionUID = -1114244843521493300L;
 	private static int screenW = 120;
-	private static int screenH = 450;
+	private static int screenH = 540;
 	
 	private BufferedImage action;
 	private boolean solved;
@@ -26,7 +26,7 @@ public class ControlPanel extends JPanel implements Runnable{
 		this.setPreferredSize(new Dimension(screenW,screenH));
 		this.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
 		this.setLayout(null);
-		
+		this.setFocusable(false);
 	}	
 	
 	public void reset() {
@@ -39,8 +39,15 @@ public class ControlPanel extends JPanel implements Runnable{
 		super.paintComponent(g);
 		
 		if(action!=null) {
-			g.drawImage(action, 35, 375, 50, 50, null);
+			g.drawImage(action, 35, 465, 50, 50, null);
 		}
+		
+		Graphics2D g2 = (Graphics2D) g;
+		BasicStroke strokeThick = new BasicStroke(4);
+		g2.setColor(new Color(77, 136, 219));
+		g2.setStroke(strokeThick);
+		
+		g2.drawLine(0, 300, screenW, 300);
 
 	}
 

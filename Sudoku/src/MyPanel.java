@@ -20,8 +20,8 @@ public class MyPanel extends JPanel implements Runnable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private final static int WIDTH = 450;
-	private final static int HEIGHT = 450;
+	private final static int WIDTH = 540;
+	private final static int HEIGHT = 540;
 	
 	private final static int COLS = 9;
 	private final static int ROWS = 9;
@@ -107,7 +107,7 @@ public class MyPanel extends JPanel implements Runnable{
 	
 	private void initialize() {
 		
-		delay = 0;
+		delay = 40;
 		solving = false;
 		paused = false;
 		
@@ -166,17 +166,43 @@ public class MyPanel extends JPanel implements Runnable{
 		return true;
 	}
 	
-	public void generateNewLevel() {
+	public void generateNewLevel(String gameLevel) {
 		if(solving) {
 			return;
 		}
-		long startTime = System.nanoTime();
-		LevelGenerator newLevel = new LevelGenerator();
-		val = newLevel.getArray();
-		long endTime = System.nanoTime();
+		
+		int level;
+		
+		switch(gameLevel) {
+			case "Easy": 
+				level = 25;
+				break;
+			case "Normal":
+				level = 42;
+				break;
+			case "Difficult":	
+				level = 60;
+				break;
+			default:
+				level = 60;
+		}
+		
+		//long value=0;
+		
+		//for(int i=1; i<=1000; i++) {
+			long startTime = System.nanoTime();
+			LevelGenerator newLevel = new LevelGenerator(level);
+			val = newLevel.getArray();
+			long endTime = System.nanoTime();
+			long duration = (endTime - startTime);
+			//value+=duration;
+		//}
+		
+		//value = value/1000;
+		
+		System.out.println(((double)duration)/1000000 + " averae milliseconds for auto level generation");
+		
 		initialize();
-		long duration = (endTime - startTime);
-		System.out.println(((double)duration)/1000000 + " milliseconds for auto level generation");
 		repaint();
 	}
 	

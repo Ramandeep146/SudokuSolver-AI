@@ -13,13 +13,16 @@ public class LevelGenerator {
 	private int totalCells = 81;
 	private Random random;
 	//hard level
-	private int level = 60;
+	private int level;
 	
-	LevelGenerator(){
+	LevelGenerator(int gameLevel){
+		
+		level = gameLevel;
 		
 		cellListInUse = new ArrayList<Integer>(81);
 		eachCellValues = new ArrayList<ArrayList<Integer>>(81);
 		array = new int[9][9];
+		
 		for(int i=0; i<totalCells; i++) {
 			cellListInUse.add(i);
 			ArrayList<Integer> helper = new ArrayList<Integer>();

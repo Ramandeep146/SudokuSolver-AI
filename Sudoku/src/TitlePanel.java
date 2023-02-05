@@ -14,7 +14,7 @@ public class TitlePanel extends JPanel{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static int screenW = 570;
+	private static int screenW = 660;
 	private static int screenH = 80;
 	
 	TitlePanel(){
