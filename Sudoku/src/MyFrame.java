@@ -21,6 +21,7 @@ public class MyFrame extends JFrame{
 	private int gap = 30;
 	
 	private String gameLevel;
+	private String speed;
 	
 	MyButton start;
 	MyButton pause;
@@ -28,6 +29,7 @@ public class MyFrame extends JFrame{
 	MyButton reset;
 	MyButton generateNew;
 	MyComboBox myComboBox;
+	MyComboBox speedBox;
 	
 	MyFrame(){
 		
@@ -40,13 +42,27 @@ public class MyFrame extends JFrame{
 		JPanel bigPanel = new JPanel();
 		bigPanel.setLayout(new BoxLayout(bigPanel, BoxLayout.X_AXIS));
 		
+		String[] allSpeeds = {"Instant", "Slow", "Fast"};
+		speedBox = new MyComboBox(allSpeeds, 15, (buttonH + gap) * 1 + gap+gap/2, buttonW, buttonH);
+		speed = (String) speedBox.getSelectedItem();
+		speedBox.addActionListener(e -> {
+			
+			if(speedBox.getSelectedItem() == null) {
+				return;
+			}
+			
+			if(e.getSource()==speedBox) {
+				speed = (String) speedBox.getSelectedItem();
+			}
+		});
+		controlPanel.add(speedBox);
 		
 		// Buttons added in the control panel
-		start = new MyButton("Auto Solve", 10, (buttonH + gap) * 0 + gap, buttonW, buttonH);
+		start = new MyButton("Auto Solve", 15 + buttonW + 10, (buttonH + gap) * 1 + gap+gap/2, buttonW, buttonH);
 		start.addActionListener(e -> autoSolve());
 		controlPanel.add(start);
 		
-		pause = new MyButton("Pause", 10, (buttonH + gap) * 1 + gap, buttonW, buttonH);
+		pause = new MyButton("Pause", 15 + buttonW/2 + 5, (buttonH + gap) * 2 + gap+gap/2, buttonW, buttonH);
 		pause.addActionListener(e -> {
 			try {
 				pause();
@@ -57,20 +73,20 @@ public class MyFrame extends JFrame{
 		});
 		controlPanel.add(pause);
 		
-		reset = new MyButton("Reset", 10, (buttonH + gap) * 2 + gap, buttonW, buttonH);
+		reset = new MyButton("Reset", 15+ buttonW/2 + 5, (buttonH + gap) * 3 + gap+gap/2, buttonW, buttonH);
 		reset.addActionListener(e -> reset());
 		controlPanel.add(reset);
 
-		
-		check = new MyButton("Check", 10, (buttonH + gap) * 3 + gap, buttonW, buttonH);
+		check = new MyButton("Check", 15+ buttonW/2 + 5, (buttonH + gap) * 4 + gap+gap/2, buttonW, buttonH);
 		check.addActionListener(e -> check());
 		controlPanel.add(check);
 		
-		generateNew = new MyButton("New Level", 10, (buttonH + gap) * 4 + gap+gap/2, buttonW, buttonH);
+		generateNew = new MyButton("New Level", 15 + buttonW + 10, (buttonH + gap) * 0 + gap, buttonW, buttonH);
 		generateNew.addActionListener(e -> generateNew());
 		controlPanel.add(generateNew);
 		
-		myComboBox = new MyComboBox(10, (buttonH + gap) * 5 + gap+gap/2, buttonW, buttonH);
+		String[] text = {"Easy", "Normal", "Difficult"};
+		myComboBox = new MyComboBox(text, 15, (buttonH + gap) * 0 + gap, buttonW, buttonH);
 		gameLevel = (String) myComboBox.getSelectedItem();
 		myComboBox.addActionListener(e -> {
 			
@@ -123,8 +139,8 @@ public class MyFrame extends JFrame{
 
 	private void autoSolve() {
 		controlPanel.reset();
-		if(!myPanel.getSolvingStatus()) {	
-			myPanel.autoSolveBut();
+		if(!myPanel.getSolvingStatus()) {
+			myPanel.autoSolveBut(speed);
 		}
 	}
 

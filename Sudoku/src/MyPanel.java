@@ -32,6 +32,7 @@ public class MyPanel extends JPanel implements Runnable{
 	private boolean solving = false;
 	private boolean paused = false;
 	private int delay = 50;
+	private int autoSolvingSpeed = 0;
 	
 	private Point selectedPoint;
 	
@@ -107,7 +108,7 @@ public class MyPanel extends JPanel implements Runnable{
 	
 	private void initialize() {
 		
-		delay = 40;
+		delay = autoSolvingSpeed;
 		solving = false;
 		paused = false;
 		
@@ -131,7 +132,22 @@ public class MyPanel extends JPanel implements Runnable{
 		
 	}
 
-	public void autoSolveBut() {
+	public void autoSolveBut(String speed) {
+		
+		switch(speed) {
+			case "Instant": 
+				autoSolvingSpeed = 0;
+				break;
+			case "Slow": 	
+				autoSolvingSpeed = 80;
+				break;
+			case "Fast":	
+				autoSolvingSpeed = 20;
+				break;
+			default:	
+				autoSolvingSpeed = 0;
+		}
+		
 		initialize();
 		myThread = new Thread(this);
 		myThread.start();

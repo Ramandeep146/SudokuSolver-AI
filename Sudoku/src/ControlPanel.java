@@ -13,12 +13,14 @@ public class ControlPanel extends JPanel implements Runnable{
 	 * 
 	 */
 	private static final long serialVersionUID = -1114244843521493300L;
-	private static int screenW = 120;
+	private static int screenW = 240;
 	private static int screenH = 540;
 	
 	private BufferedImage action;
 	private boolean solved;
 	Thread t;
+	
+	boolean bool;
 
 	
 	ControlPanel(){
@@ -27,10 +29,11 @@ public class ControlPanel extends JPanel implements Runnable{
 		this.setBorder((BorderFactory.createLineBorder(new Color(77, 136, 219), 2)));
 		this.setLayout(null);
 		this.setFocusable(false);
+		bool = false;
 	}	
 	
 	public void reset() {
-		action = null;
+		bool = false;
 		repaint();
 	}
 	
@@ -38,8 +41,16 @@ public class ControlPanel extends JPanel implements Runnable{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		if(action!=null) {
-			g.drawImage(action, 35, 465, 50, 50, null);
+		if(bool) {
+			g.drawImage(action, 80, 410, 80, 80, null);
+		}else {
+			try {
+				action = ImageIO.read(new File("s.png"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			g.drawImage(action, 60, 400, 120, 110, null);
 		}
 		
 		Graphics2D g2 = (Graphics2D) g;
@@ -47,14 +58,14 @@ public class ControlPanel extends JPanel implements Runnable{
 		g2.setColor(new Color(77, 136, 219));
 		g2.setStroke(strokeThick);
 		
-		g2.drawLine(0, 300, screenW, 300);
+		g2.drawLine(0, 92, screenW, 92);
 
 	}
 
 	@SuppressWarnings("static-access")
 	@Override
 	public void run() {
-		System.out.println("running");
+		bool = true;
 		if(solved) {
 			displayTick();
 		}else {
@@ -71,6 +82,7 @@ public class ControlPanel extends JPanel implements Runnable{
 
 	public void displayTick() {
 		try {
+			action = null;
 			action = ImageIO.read(new File("check.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -82,6 +94,7 @@ public class ControlPanel extends JPanel implements Runnable{
 	
 	public void displayCross() {
 		try {
+			action = null;
 			action = ImageIO.read(new File("close.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
