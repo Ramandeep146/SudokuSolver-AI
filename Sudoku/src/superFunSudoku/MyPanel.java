@@ -86,6 +86,15 @@ public class MyPanel extends JPanel implements Runnable{
 				int i = selectedPoint.getY()/UNITS;
 				int j = selectedPoint.getX()/UNITS;
 				int val = e.getKeyChar()-48;
+				System.out.println(val);
+				
+				if(i < 0 || j < 0) {
+					return;
+				}
+				
+				if(val < 0 || val > 9) {
+					return;
+				}
 				
 				if(values[i][j] == val) {
 					values[i][j] = 0;
@@ -204,7 +213,7 @@ public class MyPanel extends JPanel implements Runnable{
 				level = 60;
 		}
 		
-		//long value=0;
+		long value=0;
 		
 		//for(int i=1; i<=1000; i++) {
 			long startTime = System.nanoTime();
@@ -212,12 +221,12 @@ public class MyPanel extends JPanel implements Runnable{
 			val = newLevel.getArray();
 			long endTime = System.nanoTime();
 			long duration = (endTime - startTime);
-			//value+=duration;
+			value+=duration;
 		//}
 		
-		//value = value/1000;
+		value = value/1000;
 		
-		System.out.println(((double)duration)/1000000 + " averae milliseconds for auto level generation");
+		System.out.println(((double)duration)/1000000000 + " average milliseconds for auto level generation");
 		
 		initialize();
 		repaint();

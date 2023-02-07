@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -48,8 +47,6 @@ public class TitlePanel extends JPanel{
 		FontMetrics metrics = getFontMetrics(g.getFont());
 		g.setColor(new Color(77, 136, 219));
 		g.drawString(message, screenW/2 - metrics.stringWidth(message)/2, screenH/2 + fontSize/2 - 8);
-		
-		
 		
 		g.drawImage(image, 0, 0, screenW, screenH, null);
 	}

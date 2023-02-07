@@ -9,26 +9,26 @@ public class LevelGenerator {
 	
 	private ArrayList<ArrayList<Integer>> eachCellValues;
 	
-	private int shuffledNumbers[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+	private int[] shuffledNumbers = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 	
-	private int totalCells = 81;
+	private int totalCells;
 	private Random random;
-	//hard level
 	private int level;
 	
 	LevelGenerator(int gameLevel){
 		
 		level = gameLevel;
-		
+		totalCells = 81;
 		cellListInUse = new ArrayList<Integer>(81);
 		eachCellValues = new ArrayList<ArrayList<Integer>>(81);
 		array = new int[9][9];
 		
 		for(int i=0; i<totalCells; i++) {
 			cellListInUse.add(i);
-			ArrayList<Integer> helper = new ArrayList<Integer>();
+			ArrayList<Integer> helper = new ArrayList<Integer>(10);
+			shuffle(shuffledNumbers);
 			for(int j=0; j<9; j++) {
-				helper.add(j+1);
+				helper.add(shuffledNumbers[j]);
 			}
 			eachCellValues.add(helper);
 		}
@@ -36,7 +36,7 @@ public class LevelGenerator {
 		shuffle(shuffledNumbers);
 		if(createFullBoard(0)) {
 			for(int i=0; i<9; i++) {
-				System.out.print("/////");
+				System.out.print("///// ");
 				for(int j=0; j<9; j++) {
 					System.out.print(array[i][j]);
 				}
@@ -45,13 +45,12 @@ public class LevelGenerator {
 			releaseValues(0);
 		}
 		System.out.println();
-		//System.out.println(cellListInUse.size());
 	}
 	
 	
 	
 	private void shuffle(int[] shuffledNumbers) {
-		Random random = new Random();
+		random = new Random();
 		int temp;
 		int upperBound = 8;
 		for(int i=0; i<upperBound; i++) {
@@ -68,11 +67,12 @@ public class LevelGenerator {
 
 	private boolean createFullBoard(int i) {
 		
-		if(i==81) {
+		if(i==totalCells) {
 			return true;
 		}
-		
-		for(int val: shuffledNumbers) {
+		ArrayList<Integer> helper = eachCellValues.get(i);
+		for(int j=0; j<9; j++) {
+			int val = helper.get(j);
 			int a = i/9;
 			int b = i%9;
 			if(checkValidity(a, b, val, array)) {
@@ -138,26 +138,13 @@ public class LevelGenerator {
 		int b = indexToBeRem%9;
 		int indexValue = array[a][b];
 		
-		eachCellValues.get(indexToBeRem).remove(indexValue-1);
 		
 		array[a][b] = 0;
 		
-		int[][] arr = new int[9][9];
-		
-		for(int k1=0; k1<9; k1++) {
-			for(int k2=0; k2<9; k2++) {
-				arr[k1][k2] = array[k1][k2];
-			}
-		}
-		
-		if(solveNewBoard(0,arr)) {
+		if(solveNewBoard(0,array, indexValue, a, b)) {
 			// multiple solutions
 			array[a][b] = indexValue;
-		}else {
-			// only one solution
-			array[a][b] = 0;
 		}
-		eachCellValues.get(indexToBeRem).add(indexValue);
 		
 		i++;
 		if(releaseValues(i)) {
@@ -168,9 +155,9 @@ public class LevelGenerator {
 		
 	}
 
-	private boolean solveNewBoard(int i, int[][] arr) {
+	private boolean solveNewBoard(int i, int[][] arr, int indexValue, int p1, int p2) {
 		
-		if(i==81) {
+		if(i==totalCells) {
 			return true;
 		}
 	
@@ -184,10 +171,14 @@ public class LevelGenerator {
 			a = i/9;
 			b = i%9;
 		}
-		for(int val: eachCellValues.get(i)) {
+		for(int val=1; val<=9; val++) {
+			if(a==p1 && b==p2 && val == indexValue) {
+				continue;
+			}
 			if(checkValidity(a, b, val, arr)) {
 				arr[a][b] = val;
-				if(solveNewBoard(i+1, arr)) {
+				if(solveNewBoard(i+1, arr, indexValue, p1, p2)) {
+					arr[a][b]=0;
 					return true;
 				}else {
 					arr[a][b] = 0;
