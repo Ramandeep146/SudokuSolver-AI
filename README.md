@@ -15,6 +15,4 @@ Getting Started:
 
 - You can download the .exe file to play Super Fun Sudoku on your local machine.
 
-Demo Video: 
-
-        https://www.youtube.com/watch?v=xZ-OOCia_Ms 
+Demo Video: https://www.youtube.com/watch?v=xZ-OOCia_Ms 
