@@ -8,11 +8,12 @@ Super Fun Sudoku is a modern take on the classic puzzle game, delivering an unpa
 
 Testing:
 
-    Performed 1000 tests to ensure the performance and user experience of Super Fun Sudoku. Generating a puzzle takes an average time of 3.00 milliseconds, and auto 
+- Performed 1000 tests to ensure the performance and user experience of Super Fun Sudoku. Generating a puzzle takes an average time of 3.00 milliseconds, and auto 
 solving the puzzle takes an average time of 0.50 milliseconds.
 
 Getting Started:
 
-    You can download the .exe file to play Super Fun Sudoku on your local machine.
+- You can download the .exe file to play Super Fun Sudoku on your local machine.
 
-Demo Video: https://www.youtube.com/watch?v=xZ-OOCia_Ms 
+Demo Video: 
+        https://www.youtube.com/watch?v=xZ-OOCia_Ms 
